@@ -1,8 +1,18 @@
 ---
 title: "Mouse RNAseq"
 author: "Jessie Tignor"
-date: "16 Jan 2025"
-# mouse-RNA-seq
+date: "January 16th, 2025"
+output: 
+  github_document:
+    fig_width: 5
+    fig_height: 5
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(base.dir = TRUE)
+```
+
+
+### Introduction 
 detailed pipeline tailored to mouse RNA sequencing analysis to identify pathways associated with up and downregulated genes
 Mouse RNA-Seq Analysis Workflow
 # Introduction
