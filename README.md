@@ -1,18 +1,18 @@
----
-title: "Mouse RNAseq"
-author: "Jessie Tignor"
-date: "January 16th, 2025"
-output: 
-  github_document:
-    fig_width: 5
-    fig_height: 5
----
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(base.dir = TRUE)
-```
+Mouse RNAseq
+================
+Jessie Tignor
+January 16th, 2024
 
+### Introduction
 
-### Introduction 
+RNA seq is an emerging technology for deep RNA sequencing. Not only does RNA seq technology have the ability to analyze differences in gene expression between samples, but can discover new isoforms of genes and analyze SNP variation of particular genes. This tutorial will cover the basic workflow for analyzing RNA seq data on host tissue. It will not cover the workflow for analyzing RNA seq on microbial community samples. For analysis of the meta-transcriptome using RNA seq, see the workflow for Whole Genome Sequencing Metagenomics.
+
+### 1. Setup new bio-cookie template for a new RNAseq analysis
+
+The easiest way to set up the RNAseq environment is by using a bio-cookie template. This template will download all the necessary tools into a new virtual environment, so that there are no disruptions with your current computer packaging versions. It is high reccomended to run on all of these commands on a high performance cluster.
+
+The template will also ask if you would like to download a human or mouse genome for transcriptome alignment. If you want to align to a genome which is neither human or murine, then you must select "None" in the option and download the genome and annotation file separately. Below are a list of the tools which are downloaded during the installation steps. See here for a list of availabel genomes (<https://genome.ucsc.edu/cgi-bin/hgGateway> / <http://useast.ensembl.org/info/data/ftp/index.html> )
+
 detailed pipeline tailored to mouse RNA sequencing analysis to identify pathways associated with up and downregulated genes
 Mouse RNA-Seq Analysis Workflow
 # Introduction
