@@ -4,7 +4,6 @@ Jessie Tignor
 January 16th, 2024
 
 ### Introduction
-
 This repository provides a comprehensive step-by-step guide for analyzing mouse RNA-seq data to identify up and downregulated genes. The workflow assumes no prior coding experience and includes all commands, package installations, and reasoning behind chosen input options.
 
 ### 1. Environment Setup
