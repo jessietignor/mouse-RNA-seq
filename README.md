@@ -9,7 +9,7 @@ This repository provides a comprehensive step-by-step guide for analyzing mouse 
 
 ### 1. Environment Setup
 
-# Install Conda Package Manager
+#### Install Conda Package Manager
 
 Conda simplifies package installation and environment management.
 
