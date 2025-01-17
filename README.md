@@ -4,33 +4,103 @@ Jessie Tignor
 January 16th, 2024
 
 ### Introduction
+
 This repository provides a comprehensive step-by-step guide for analyzing mouse RNA-seq data to identify up and downregulated genes. The workflow assumes no prior coding experience and includes all commands, package installations, and reasoning behind chosen input options.
 
 ### 1. Environment Setup
 
-#### Install Conda Package Manager
+#### 1a. Install Conda Package Manager
 
 Conda simplifies package installation and environment management.
 
-The easiest way to set up the RNAseq environment is by using a bio-cookie template. This template will download all the necessary tools into a new virtual environment, so that there are no disruptions with your current computer packaging versions. It is high reccomended to run on all of these commands on a high performance cluster.
+``` bash
+# Download Miniconda installer
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-The template will also ask if you would like to download a human or mouse genome for transcriptome alignment. If you want to align to a genome which is neither human or murine, then you must select "None" in the option and download the genome and annotation file separately. Below are a list of the tools which are downloaded during the installation steps. See here for a list of availabel genomes (<https://genome.ucsc.edu/cgi-bin/hgGateway> / <http://useast.ensembl.org/info/data/ftp/index.html> )
+# Run installer
+bash Miniconda3-latest-Linux-x86_64.sh
 
-detailed pipeline tailored to mouse RNA sequencing analysis to identify pathways associated with up and downregulated genes
-Mouse RNA-Seq Analysis Workflow
-# Introduction
-This repository provides a comprehensive step-by-step guide for analyzing RNA-seq data to identify up- and downregulated genes and their associated pathways. The workflow assumes no prior coding experience and includes all commands, package installations, and reasoning behind chosen input options.
+# Follow the prompts and restart the terminal
+source ~/.bashrc
+```
 
-System and Software Setup
+#### 1b. Create and Activate Conda Environment
 
-System Specifications:
+``` bash
+# Create an environment named 'rna_seq'
+conda create -n rna_seq python=3.8 -y
 
-OS: Linux Rocky 9
+# Activate the environment
+conda activate rna_seq
+```
 
-Memory: 256GB RAM
+### 2. Package Installation
 
-CPUs: 16 cores
+#### 2a. Install Required Tools and R Packages
 
-Data Source: Raw sequencing reads and quality metrics were provided by the Illumina sequencing core (DRAGEN fastqc reports, read metrics, and read instrument analytics).
+``` bash
+# Install fastp for trimming and filtering
+conda install -c bioconda fastp -y
 
-Samples: 4 mutants (AI1, AI4, AI7, AI9) and 1 parental control.
+# Install HISAT2 for alignment
+conda install -c bioconda hisat2 -y
+
+# Install SAMtools for file conversion and indexing
+conda install -c bioconda samtools -y
+
+# Install featureCounts for gene count matrix generation
+conda install -c bioconda subread -y
+
+# Install R and RStudio (if not pre-installed)
+conda install -c r r-base r-essentials -y
+
+# Install DESeq2 from Bioconductor in R
+R
+> if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+> BiocManager::install("DESeq2")
+> install.packages("ggplot2")
+> install.packages("pheatmap")
+> BiocManager::install("clusterProfiler")
+> BiocManager::install("org.Mm.eg.db")  # For mouse annotation
+q()
+```
+### 3. Quality Control
+Trim and filter raw reads use fastp to remove low-quality reads and trim adapters.
+``` bash
+# Run fastp for paired-end data
+fastp -i AI1_R1.fastq.gz -I AI1_R2.fastq.gz \
+      -o AI1_R1_trimmed.fastq.gz -O AI1_R2_trimmed.fastq.gz \
+      --html AI1_fastp_report.html --json AI1_fastp_report.json
+
+# Repeat for all samples (AI4, AI7, AI9, parental)
+```
+### 4. Read Alignment
+Align Reads
+``` bash
+# Download genome index
+wget -O grcm38_index.tar.gz https://example.com/path_to_hisat2_index.tar.gz
+tar -xvzf grcm38_index.tar.gz
+
+# Align reads using HISAT2
+hisat2 -x grcm38/genome \
+       -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_trimmed.fastq.gz \
+       -S AI1_aligned.sam --summary-file AI1_alignment_summary.txt
+
+# Repeat for all samples
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
