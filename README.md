@@ -1,13 +1,17 @@
-Mouse RNAseq
+Mouse RNAseq Workflow
 ================
 Jessie Tignor
 January 16th, 2024
 
 ### Introduction
 
-RNA seq is an emerging technology for deep RNA sequencing. Not only does RNA seq technology have the ability to analyze differences in gene expression between samples, but can discover new isoforms of genes and analyze SNP variation of particular genes. This tutorial will cover the basic workflow for analyzing RNA seq data on host tissue. It will not cover the workflow for analyzing RNA seq on microbial community samples. For analysis of the meta-transcriptome using RNA seq, see the workflow for Whole Genome Sequencing Metagenomics.
+This repository provides a comprehensive step-by-step guide for analyzing mouse RNA-seq data to identify up and downregulated genes. The workflow assumes no prior coding experience and includes all commands, package installations, and reasoning behind chosen input options.
 
-### 1. Setup new bio-cookie template for a new RNAseq analysis
+### 1. Environment Setup
+
+# Install Conda Package Manager
+
+Conda simplifies package installation and environment management.
 
 The easiest way to set up the RNAseq environment is by using a bio-cookie template. This template will download all the necessary tools into a new virtual environment, so that there are no disruptions with your current computer packaging versions. It is high reccomended to run on all of these commands on a high performance cluster.
 
