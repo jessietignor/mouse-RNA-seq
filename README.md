@@ -1,7 +1,7 @@
 Mouse RNAseq Workflow
 ================
 Jessie Tignor
-January 16th, 2024
+January 21st, 2024
 
 ### Introduction
 
@@ -38,32 +38,9 @@ conda activate rna_seq_analysis
 #### 2a. Install Required Tools and R Packages
 
 ``` bash
-# Install fastp for trimming and filtering
-conda install -c bioconda fastp -y
-
-# Install HISAT2 for alignment
-conda install -c bioconda hisat2 -y
-
-# Install SAMtools for file conversion and indexing
-conda install -c bioconda samtools -y
-
-# Install featureCounts for gene count matrix generation
-conda install -c bioconda subread -y
-
-# Install R and RStudio (if not pre-installed)
-conda install -c r r-base r-essentials -y
-
-# Install DESeq2 from Bioconductor in R
-R
-> if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-> BiocManager::install("DESeq2")
-> install.packages("ggplot2")
-> install.packages("pheatmap")
-> BiocManager::install("clusterProfiler")
-> BiocManager::install("org.Mm.eg.db")  # For mouse annotation
-q()
+conda install -c bioconda fastp hisat2 samtools subread -y
 ```
+
 ### 3. Quality Control
 To ensure the quality of your raw sequencing data, use fastp for trimming and filtering reads. For paired end data (gzip compressed):
 ``` bash
@@ -74,16 +51,18 @@ fastp -i AI1_R1.fastq.gz -I AI1_R2.fastq.gz -o AI1_R1_trimmed.fastq.gz -O AI1_R2
 HTML and JSON reports are generated as well. Both provide a summary of filtering results.
 
 ### 4. Read Alignment
-Align Reads
-``` bash
-# Download genome index
-wget -O grcm38_index.tar.gz https://example.com/path_to_hisat2_index.tar.gz
-tar -xvzf grcm38_index.tar.gz
 
-# Align reads using HISAT2
-hisat2 -x grcm38/genome \
-       -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_trimmed.fastq.gz \
-       -S AI1_aligned.sam --summary-file AI1_alignment_summary.txt
+#### 4a. Download Genome Index
+Download the pre-built genome_tran index for GRCm38 from the HISAT2 website. This index includes both the genome and transcript annotations.
+``` bash
+wget -c https://genome-idx.s3.amazonaws.com/hisat/genome_tran.tar.gz
+tar -xvzf genome_tran.tar.gz
+mv genome_tran GRCm38_index
+```
+#### 4b. Align Reads
+HISAT2 maps RNA-seq reads to a reference genome for accurate alignment.
+``` bash
+hisat2 -p 16 -x GRCm38_index/genome_tran -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_trimmed.fastq.gz -S AI1_aligned.sam
 
 # Repeat for all samples
 ```
@@ -93,7 +72,11 @@ hisat2 -x grcm38/genome \
 
 
 
-
+``` bash
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("DESeq2")
+```
 
 
 
