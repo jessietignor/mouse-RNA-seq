@@ -62,11 +62,11 @@ mv genome_tran GRCm38_index
 #### 4b. Align Reads
 HISAT2 maps RNA-seq reads to a reference genome for accurate alignment.
 ``` bash
-hisat2 -p 16 -x GRCm38_index/genome_tran -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_trimmed.fastq.gz -S AI1_aligned.sam
+hisat2 -p 15 -x GRCm38_index/genome_tran -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_trimmed.fastq.gz -S AI1_aligned.sam
 
 # Repeat for all samples
 ```
-
+"-p" specifies the number of CPUS threads to use. I used 15 CPU threads because I have 16 CPUS and left one available for system processes. The alignment process is much faster when distributed across multiple cores.
 
 
 
