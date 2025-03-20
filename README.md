@@ -73,7 +73,7 @@ Sorting optimizes read lookup speeds, and indexing allows for effician downstrea
 
 ### 6. Gene Quantification with featureCounts  
 #### 6a. Download Annotation File  
-The **GTF** annotation file for **GRCm38** was downloaded from the **Ensembl database** (version 101) to ensure accurate gene mapping.  
+The **GTF** annotation file for **GRCm38** was downloaded from the **Ensembl database** (Ensembl Release 102) to ensure accurate gene mapping.  
 ```bash
 wget ftp://ftp.ensembl.org/pub/release-101/gtf/mus_musculus/Mus_musculus.GRCm38.101.gtf.gz
 gunzip Mus_musculus.GRCm38.101.gtf.gz
