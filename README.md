@@ -1,7 +1,7 @@
 Mouse RNAseq Workflow
 ================
 Jessie Tignor
-January 21st, 2024
+March 20th, 2025
 
 ### Introduction
 This repository documents the steps to process and analyze mouse RNA sequencing data for identifying upregulated and downregulated genes. The workflow assumes no prior coding experience and includes all commands and package installations.
@@ -91,4 +91,9 @@ featureCounts -T 15 -a GRCm38_annotation.gtf -o gene_counts.txt AI1_sorted.bam A
 The output, `gene_counts.txt` contains raw gene counts for all samples
 
 ### Citations:
-1. Shifu Chen. 2023. Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta 2: e107. Available here: <https://github.com/OpenGene/fastp> <https://doi.org/10.1002/imt2.107>.
+1. conda contributors. conda: A system-level, binary package and environment manager running on all major operating systems and platforms. Available here: <https://github.com/conda/conda> <https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions>.
+2. Shifu Chen. 2023. Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta 2: e107. Available here: <https://github.com/OpenGene/fastp> <https://doi.org/10.1002/imt2.107>.
+3. Kim, D., Langmead, B. & Salzberg, S. HISAT: a fast spliced aligner with low memory requirements. *Nat Methods* 12, 357–360 (2015). Available here: <https://doi.org/10.1038/nmeth.3317> <https://daehwankimlab.github.io/hisat2/main/>.
+4. Petr Danecek, James K Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O Pollard, Andrew Whitwham, Thomas Keane, Shane A McCarthy, Robert M Davies, Heng Li, Twelve years of SAMtools and BCFtools, *GigaScience*, Volume 10, Issue 2, February 2021, giab008. Available here: <https://doi.org/10.1093/gigascience/giab008> <https://www.htslib.org/>.
+5. Liao Y, Smyth GK and Shi W (2014). featureCounts: an efficient general purpose program for assigning sequence reads to genomic features. *Bioinformatics*, 30(7):923-30. Available here: <https://pubmed.ncbi.nlm.nih.gov/24227677/> <https://subread.sourceforge.net/featureCounts.html>.
+
