@@ -138,4 +138,4 @@ write.csv(res_filtered, "differential_expression_results.csv")
 
 6. Liao Y, Smyth GK and Shi W (2014). featureCounts: an efficient general purpose program for assigning sequence reads to genomic features. *Bioinformatics*, 30(7):923-30. Available here: <https://pubmed.ncbi.nlm.nih.gov/24227677/> & <https://subread.sourceforge.net/featureCounts.html>.
 
-7. Love, M.I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol 15, 550 (2014). Available here: <https://doi.org/10.1186/s13059-014-0550-8> & <https://bioconductor.org/packages/release/bioc/html/DESeq2.html>.
+7. Love, M.I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). Available here: <https://doi.org/10.1186/s13059-014-0550-8> & <https://bioconductor.org/packages/release/bioc/html/DESeq2.html>.
