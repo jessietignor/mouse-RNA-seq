@@ -70,7 +70,7 @@ samtools index AI1_sorted.bam
 
 # Repeat for all samples
 ```
-Sorting optimizes read lookup speeds, and indexing allows for effician downstream analyses.
+Sorting optimizes read lookup speeds, and indexing allows for efficient downstream analyses.
 
 ### 6. Gene Quantification with featureCounts  
 #### 6a. Download Annotation File  
