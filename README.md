@@ -5,7 +5,7 @@ Jessie Tignor
 March 20th, 2025
 
 ### Introduction
-This repository documents the steps to process and analyze mouse RNA sequencing data for identifying upregulated and downregulated genes. The workflow assumes no prior coding experience and includes all commands and package installations.
+This repository documents the steps to process and analyze mouse RNA sequencing data for identifying upregulated and downregulated genes. The workflow assumes **no prior coding experience** and includes all commands and package installations.
 
 The analysis was performed using R and RStudio on a **Linux Rocky 9** system with 256GB of RAM and 16 CPUs. Raw sequencing data was provided by the **Illumina** sequencing core. The samples include 4 mutants (AI1, AI4, AI7, AI9) and one control (parental). To replicate this workflow, replace the sample file names with your own.
 
