@@ -31,7 +31,7 @@ conda activate rna_seq_analysis
 ### 2. Package Installation
 #### 2a. Install Required Tools and R Packages
 ``` bash
-conda install -c bioconda fastp hisat2 samtools subread -y
+conda install -c bioconda fastp hisat2 samtools subread gffread -y
 ```
 
 ### 3. Quality Control
@@ -41,7 +41,10 @@ fastp -i AI1_R1.fastq.gz -I AI1_R2.fastq.gz -o AI1_R1_trimmed.fastq.gz -O AI1_R2
 
 # Repeat for all samples (AI4, AI7, AI9, parental).
 ```
-**HTML** and **JSON** reports are generated as well. Both provide a summary of filtering results.
+Flags:
+- `-i/-I`: Input R1 and R2 FASTQ files
+- `-o/-O`: Output trimmed R1 and R2 FASTQ files
+- `-h/-j`: Generate HTML and JSON reports for quality metrics
 
 ### 4. Read Alignment
 #### 4a. Download Genome Index
@@ -59,7 +62,13 @@ hisat2 -p 15 -x GRCm38_index/genome_tran -1 AI1_R1_trimmed.fastq.gz -2 AI1_R2_tr
 
 # Repeat for all samples
 ```
-`-p` specifies the number of CPUS threads to use. I used 15 CPU threads because I have 16 CPUS and left one available for system processes. The alignment process is much faster when distributed across multiple cores.
+Flags:
+- `-p`: Number of threads
+- `-x`: Index path
+- `-1/-2`: Paired-end reads
+- `-S`: Output SAM file
+
+I used 15 CPU threads because I have 16 CPUS and left one available for system processes. The alignment process is much faster when distributed across multiple cores.
 
 ### 5. Convert and Sort BAM Files  
 After alignment, convert **SAM** files to **BAM** format, sort them, and create index files using `SAMtools`:  
@@ -72,58 +81,37 @@ samtools index AI1_sorted.bam
 ```
 Sorting optimizes read lookup speeds, and indexing allows for efficient downstream analyses.
 
-### 6. Gene Quantification with featureCounts  
-#### 6a. Download Annotation File  
-The **GTF** annotation file for **GRCm38** was downloaded from the **Ensembl database** (Ensembl Release 102) to ensure accurate gene mapping.  
+### 6. Check Strandedness
+Before running `featureCounts`, it's important to determine the strandedness of your RNA-seq data for accurate gene quantification. You typically only need to check strandedness on **one representative sample**, such as AI1, assuming all samples were prepared with the same library construction protocol.
+#### 6a. Convert GTF to BED
+We'll use `gffread` and `awk` to prepare a BED file from the GTF annotation. This is required for the `infer_experiment.py` tool:
 ```bash
-wget ftp://ftp.ensembl.org/pub/release-101/gtf/mus_musculus/Mus_musculus.GRCm38.101.gtf.gz
-gunzip Mus_musculus.GRCm38.101.gtf.gz
-mv Mus_musculus.GRCm38.101.gtf GRCm38_annotation.gtf
+gffread Mus_musculus.GRCm38.101.gtf -T -o gffread_annotation.gtf
+awk '$3 == "exon" {print $1"\t"$4-1"\t"$5"\t"$10"\t0\t"$7}' Mus_musculus.GRCm38.101.gtf | tr -d '";' > annotation.bed
 ```
-This file containts gene annotations needed for quantifying mapped reads.
 
-#### 6b. Generate Raw Gene Counts
-Use `featureCounts` to create a count matrix by mapping aligned reads to annotated genes:
-``` bash
-featureCounts -T 15 -a GRCm38_annotation.gtf -o gene_counts.txt AI1_sorted.bam AI4_sorted.bam AI7_sorted.bam AI9_sorted.bam Parental_sorted.bam
+#### 6b. Run Strandedness Check
+```bash
+infer_experiment.py -i AI1_sorted.bam -r annotation.bed
 ```
-`-T` specifies CPU threads.
+Interpret the results to determine if your data is:
+- Unstranded → use `-s 0`
+- Stranded (forward) → use `-s 1`
+- Stranded (reverse) → use `-s 2`
 
-The output, `gene_counts.txt` contains raw gene counts for all samples
+In our case, the data was **reversely stranded**, so we’ll set `-s 2` in the next step.
 
-###7. Differential Expression Analysis with DESeq2
-Switch to **RStudio** and load the required packages:
-``` bash
-# Load necessary libraries
-library(DESeq2)
-
-# Import count matrix
-counts <- read.delim("gene_counts.txt", row.names=1)
-
-# Define sample conditions
-sample_info <- data.frame(
-  row.names = colnames(counts),
-  condition = c("AI", "AI", "AI", "AI", "Control") # Adjust based on sample names
-)
-
-# Create DESeq2 dataset
-dds <- DESeqDataSetFromMatrix(countData = counts, colData = sample_info, design = ~ condition)
-
-# Run DESeq2 analysis
-dds <- DESeq(dds)
-
-# Extract results
-res <- results(dds, alpha=0.05)
-
-# Filter for significantly differentially expressed genes
-res_filtered <- res[res$padj < 0.05, ]
-
-# Save results
-write.csv(res_filtered, "differential_expression_results.csv")
+### 7. Quantify Genes with `featureCounts`
+```bash
+featureCounts -T 15 -s 2 -p -a Mus_musculus.GRCm38.101.gtf -o gene_counts.txt \
+  AI1_sorted.bam AI4_sorted.bam AI7_sorted.bam AI9_sorted.bam Parental_sorted.bam
 ```
-**p-value cutoff**: Adjust p-value < 0.05 to indicate significantly differentially expressed genes
-
-**Log2 Fold Change**: Used to classify genes are upregulated or downregulated.
+Flags:
+- `-T`: Number of threads
+- `-s 2`: Strandedness (use value based on strandedness check)
+- `-p`: Paired-end reads
+- `-a`: GTF annotation file
+- `-o`: Output count file
 
 ### Citations:
 1. conda contributors. conda: A system-level, binary package and environment manager running on all major operating systems and platforms. Available here: <https://github.com/conda/conda> & <https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions>.
