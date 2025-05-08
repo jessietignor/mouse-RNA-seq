@@ -2,7 +2,7 @@ Mouse RNAseq Workflow
 ================
 Jessie Tignor
 
-March 20th, 2025
+May 8th, 2025
 
 ### Introduction
 This repository documents the steps to process and analyze mouse RNA sequencing data for identifying upregulated and downregulated genes. The workflow assumes **no prior coding experience** and includes all commands and package installations.
