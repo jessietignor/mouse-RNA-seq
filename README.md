@@ -1,4 +1,4 @@
-Mouse RNAseq Workflow
+Mouse RNAseq Workflow (not finished)
 ================
 Jessie Tignor
 
